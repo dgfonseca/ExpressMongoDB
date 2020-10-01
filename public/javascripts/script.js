@@ -11,9 +11,9 @@ const renderMessages = (data) => {
 
 const handleSubmit = (evt) => {
   evt.preventDefault();
-  const message = document.getElementById("message");
-  ws.send(message.value);
-  message.value = "";
+  const messages = document.getElementById("message");
+  ws.send(messages.value);
+  messages.value = "";
 };
 
 const form = document.getElementById("form");
