@@ -19,8 +19,8 @@ router.get("/chat/api/messages", async function (req, res, next) {
 
 router.get("/chat/api/messages/:id", async function (req, res, next) {
   const chat = await getChatByTs(req.params.id);
-  if (chat.length === 0) {
-    res.send("No se encontró");
+  if (chat.length === 0 || chat === undefined) {
+    res.send("No existe chat con ese ts");
   } else res.send(chat);
 });
 
@@ -38,13 +38,24 @@ router.put("/chat/api/messages/:id", async function (req, res, next) {
   if (error) {
     return res.status(400).send(error);
   }
-  const chat = await putChat(req.params.id, req.body);
-  res.send(chat);
+  var encontró = await getChatByTs(req.params.id);
+
+  if (encontró === undefined || encontró.length === 0) {
+    res.send("No existe chat con ese ts");
+  } else {
+    await putChat(req.params.id, req.body);
+    res.send("Insertado con exito");
+  }
 });
 
 router.delete("/chat/api/messages/:id", async function (req, res, next) {
-  const chat = await delChat(req.params.id);
-  res.send(chat);
+  let encontró = await getChatByTs(req.params.id);
+  if (encontró.length === 0 || encontró === undefined) {
+    res.send("No existe chat con ese ts");
+  } else {
+    const chat = await delChat(req.params.id);
+    res.send("Se borró exitosamente");
+  }
 });
 
 module.exports = router;

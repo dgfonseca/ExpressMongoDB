@@ -1,5 +1,11 @@
 const WebSocket = require("ws");
-var [postChat] = require("./controler/chat");
+var [
+  getChats,
+  getChatByTs,
+  postChat,
+  putChat,
+  delChat,
+] = require("./controler/chat");
 
 const clients = [];
 const messages = [];
@@ -7,17 +13,17 @@ const messages = [];
 const wsConnection = (server) => {
   const wss = new WebSocket.Server({ server });
 
-  wss.on("connection", async function (ws) {
+  wss.on("connection", function (ws) {
     clients.push(ws);
     sendMessages();
 
     ws.on("message", async function (msg) {
-      console.log("ENTROOOOO");
-      var x = await postChat({
+      var chats = {
         message: msg,
-        author: "unknown",
-        ts: Math.floor(Math.random() * 100) + 1,
-      });
+        author: "Unknown author",
+        ts: Math.floor(Math.random() * 6) + 1 + "",
+      };
+      const c = await postChat(chats);
       messages.push(msg);
       sendMessages();
     });
