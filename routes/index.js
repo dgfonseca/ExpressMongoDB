@@ -52,7 +52,9 @@ module.exports = router;
 const validateChat = (client) => {
   const schema = Joi.object({
     message: Joi.string().min(5).required(),
-    author: Joi.string().required(),
+    author: Joi.string()
+      .pattern(/^[a-zA-Z]+\s[a-zA-Z]+(\s[a-zA-Z]+)*$/)
+      .required(),
     ts: Joi.string().required(),
   });
 
